@@ -72,6 +72,34 @@ input("Roll the dice for the monster's health points (Press enter)")
 m_health_points = random.choice(big_dice_options)
 print("Player rolled " + str(m_health_points) + " health points for the monster")
 
+# Define the Weapons (reintroduced from earlier code)
+weapons = ["Fist", "Knife", "Club", "Gun", "Bomb", "Nuclear Bomb"]
+
+# Roll for hero's weapon
+input("Roll the dice for your weapon (Press enter)")
+weapon_roll = random.choice(small_dice_options)
+current_weapon = weapons[weapon_roll - 1]
+print(f"The hero's weapon is {current_weapon}")
+
+# Weakness Exploit Bonus: Define monster weaknesses
+monster_weaknesses = ["Blade", "Fire", "Blunt", "Explosive"]
+current_weaknesses = random.sample(monster_weaknesses, k=2)  # 2 random weaknesses
+hero_items = [current_weapon]  # No belt, just weapon
+
+# List comprehension to calculate damage bonus
+damage_bonus = sum([
+    1 for weakness in current_weaknesses
+    if (weakness == "Blade" and "Knife" in hero_items) or
+       (weakness == "Blunt" and ("Fist" in hero_items or "Club" in hero_items)) or
+       (weakness == "Explosive" and ("Gun" in hero_items or "Bomb" in hero_items or "Nuclear Bomb" in hero_items)) or
+       (weakness == "Fire" and ("Bomb" in hero_items or "Nuclear Bomb" in hero_items))
+])
+
+# Feedback
+print(f"Monster weaknesses detected: {current_weaknesses}")
+print(f"Your weapon: {current_weapon}")
+print(f"Damage bonus from weaknesses: +{damage_bonus}")
+
 # Loop while the monster and the player are alive. Call fight sequence functions
 while m_health_points > 0 and health_points > 0:
     # Fight Sequence
@@ -80,8 +108,9 @@ while m_health_points > 0 and health_points > 0:
     attack_roll = random.choice(small_dice_options)
     if not (attack_roll % 2 == 0):
         input("You strike (Press enter)")
-        # Hero Attacks First
-        m_health_points = function.hero_attacks(combat_strength, m_health_points)
+        # Add damage_bonus to hero's attack
+        total_strength = combat_strength + damage_bonus
+        m_health_points = function.hero_attacks(total_strength, m_health_points)
         if m_health_points != 0:
             input("The monster strikes (Press enter)!!!")
             # Monster Attacks Back
@@ -93,16 +122,41 @@ while m_health_points > 0 and health_points > 0:
         health_points = function.monster_attacks(m_combat_strength, health_points)
         if health_points != 0:
             input("The hero strikes!! (Press enter)")
-            # Hero Attacks Back
-            m_health_points = function.hero_attacks(combat_strength, m_health_points)
+            # Add damage_bonus to hero's attack
+            total_strength = combat_strength + damage_bonus
+            m_health_points = function.hero_attacks(total_strength, m_health_points)
+
+# Determine winner
+if m_health_points <= 0:
+    winner = "Hero"
+    print("Hero wins!")
+else:
+    winner = "Monster"
+    print("Monster wins!")
+
+# Weakness Exploit Bonus: Post-fight rewards
+if winner == "Hero":
+    if damage_bonus > 0:  # At least one weakness exploited
+        if damage_bonus >= 2:  # Perfect exploit (both weaknesses)
+            num_stars += 1
+            print(f"Perfect exploit! +1 star (Total stars: {num_stars})")
+            if random.random() < 0.3:  # 30% chance for a message (no belt here)
+                print("You feel lucky—weakness mastery achieved!")
+        else:
+            print("Good exploit, but no extra reward.")
+    else:
+        print("No weaknesses exploited this time.")
+else:
+    if damage_bonus > 0:
+        print(f"You exploited weaknesses but still lost. Damage bonus was: +{damage_bonus}")
+    else:
+        print("Monster's weaknesses went unexploited.")
 
 # Example belt and dream level for the personality trait system
 belt = ["Health Potion", "Leather Boots", "Flimsy Gloves"]
-# num_dream_lvls = 2  # Simulate dream level (can be updated via player input)
 
 # Ask user how many dream levels they want to go down
 num_dream_lvls = -1  # initialize with invalid value
-
 while num_dream_lvls < 0 or num_dream_lvls > 3:
     try:
         num_dream_lvls = int(input("How many dream levels do you want to go down? (Enter 0-3): "))
