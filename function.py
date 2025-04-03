@@ -26,7 +26,7 @@ def determine_hero_trait(health_points, belt, num_dream_lvls):
         else:
             trait = "Average Adventurer"
 
-    print(f"🧠 Hero's Personality Unlocked: 🦸 \"{trait}\"")
+    print(f"🦸 Hero's Personality Unlocked: 🧠\"{trait}\"")
     return trait
 # Hero's Attack Functions
 def hero_attacks(combat_strength, m_health_points):

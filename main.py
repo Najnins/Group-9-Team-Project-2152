@@ -13,10 +13,6 @@ big_dice_options = list(range(1, 21))  # Max health points is 20
 num_stars = 0
 input_valid = False
 
-# Example belt and dream level for the personality trait system
-belt = ["Health Potion", "Leather Boots", "Flimsy Gloves"]
-num_dream_lvls = 2  # Simulate dream level (can be updated via player input)
-
 # Loop to get valid input for Hero Combat Strength
 i = 0
 while not input_valid and i in range(5):
@@ -99,6 +95,21 @@ while m_health_points > 0 and health_points > 0:
             input("The hero strikes!! (Press enter)")
             # Hero Attacks Back
             m_health_points = function.hero_attacks(combat_strength, m_health_points)
+
+# Example belt and dream level for the personality trait system
+belt = ["Health Potion", "Leather Boots", "Flimsy Gloves"]
+# num_dream_lvls = 2  # Simulate dream level (can be updated via player input)
+
+# Ask user how many dream levels they want to go down
+num_dream_lvls = -1  # initialize with invalid value
+
+while num_dream_lvls < 0 or num_dream_lvls > 3:
+    try:
+        num_dream_lvls = int(input("How many dream levels do you want to go down? (Enter 0-3): "))
+        if num_dream_lvls < 0 or num_dream_lvls > 3:
+            print("Please enter a number between 0 and 3.")
+    except ValueError:
+        print("Invalid input! Please enter a whole number between 0 and 3.")
 
 # Determine and print hero personality trait
 trait = function.determine_hero_trait(health_points, belt, num_dream_lvls)
