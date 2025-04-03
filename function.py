@@ -1,7 +1,33 @@
 # Import the random library to use for the dice later
 import random
 
+# Hero's Personality check
+def determine_hero_trait(health_points, belt, num_dream_lvls):
+    # List comprehension to filter useful loot
+    positive_loot = ["Health Potion", "Leather Boots"]
+    used_items = [item for item in belt if item in positive_loot]
 
+    # Nested conditional logic to assign a personality trait
+    if len(used_items) >= 2:
+        if num_dream_lvls >= 2:
+            if health_points > 15:
+                trait = "Brave"
+            else:
+                trait = "Risk Taker"
+        else:
+            if health_points > 15:
+
+                trait = "Lucky"
+            else:
+                trait = "Careful"
+    else:
+        if num_dream_lvls >= 2:
+            trait = "Reckless"
+        else:
+            trait = "Average Adventurer"
+
+    print(f"🧠 Hero's Personality Unlocked: 🦸 \"{trait}\"")
+    return trait
 # Hero's Attack Functions
 def hero_attacks(combat_strength, m_health_points):
     if combat_strength <= 0 or combat_strength >= 7:

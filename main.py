@@ -4,7 +4,6 @@ import random
 # Put all the functions into another file and import them
 import function
 
-
 # Game Flow
 # Define two Dice
 small_dice_options = list(range(1, 7))  # Max combat strength is 6
@@ -13,6 +12,10 @@ big_dice_options = list(range(1, 21))  # Max health points is 20
 # Define the number of stars to award the player
 num_stars = 0
 input_valid = False
+
+# Example belt and dream level for the personality trait system
+belt = ["Health Potion", "Leather Boots", "Flimsy Gloves"]
+num_dream_lvls = 2  # Simulate dream level (can be updated via player input)
 
 # Loop to get valid input for Hero Combat Strength
 i = 0
@@ -97,3 +100,5 @@ while m_health_points > 0 and health_points > 0:
             # Hero Attacks Back
             m_health_points = function.hero_attacks(combat_strength, m_health_points)
 
+# Determine and print hero personality trait
+trait = function.determine_hero_trait(health_points, belt, num_dream_lvls)
