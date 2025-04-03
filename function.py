@@ -1,11 +1,7 @@
-# Import the random library to use for the dice later
-import random
-
-
 # Hero's Attack Functions
 def hero_attacks(combat_strength, m_health_points):
-    if combat_strength <= 0 or combat_strength >= 7:
-        print("Hero cannot fight with 0 combat strength. Cannot exceed maximum strength of 6")
+    if combat_strength <= 0:
+        print("Hero cannot fight with 0 combat strength.")
     elif m_health_points <= 0 or m_health_points >= 21:
         print("Monster must be alive, and not exceed the maximum health points 20")
     else:
@@ -77,4 +73,3 @@ def monster_attacks(m_combat_strength, health_points):
             health_points -= m_combat_strength
             print("The monster has reduced Player's health to: " + str(health_points))
     return health_points
-

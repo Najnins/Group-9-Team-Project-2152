@@ -102,7 +102,6 @@ print(f"Your weapon: {current_weapon}")
 print(f"Damage bonus from weaknesses: +{damage_bonus}")
 
 
-
 # Loop while the monster and the player are alive. Call fight sequence functions
 while m_health_points > 0 and health_points > 0:
     input("Roll to see who attacks first (Press Enter)")
@@ -132,7 +131,7 @@ else:
     winner = "Monster"
     print("Monster wins!")
 
-# Weakness Exploit Bonus: Post-fight rewards
+# Weakness Exploit Bonus: Post-fight rewards - FIXED
 if winner == "Hero":
     if damage_bonus > 0:  # At least one weakness exploited
         if damage_bonus >= 2:  # Perfect exploit (both weaknesses)
@@ -145,4 +144,7 @@ if winner == "Hero":
     else:
         print("No weaknesses exploited this time.")
 else:
-    print("Monster’s weaknesses went unexploited.")
+    if damage_bonus > 0:
+        print(f"You exploited weaknesses but still lost. Damage bonus was: +{damage_bonus}")
+    else:
+        print("Monster's weaknesses went unexploited.")
