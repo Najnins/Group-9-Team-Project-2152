@@ -13,6 +13,11 @@ big_dice_options = list(range(1, 21))  # Max health points is 20
 num_stars = 0
 input_valid = False
 
+# move counter to track number of moves, zone check and hp lost while using
+move_count = 0
+zone_active = False
+zone_hp_cost = 5
+
 # Loop to get valid input for Hero Combat Strength
 i = 0
 while not input_valid and i in range(5):
@@ -111,6 +116,7 @@ while m_health_points > 0 and health_points > 0:
         # Add damage_bonus to hero's attack
         total_strength = combat_strength + damage_bonus
         m_health_points = function.hero_attacks(total_strength, m_health_points)
+        move_count += 1
         if m_health_points != 0:
             input("The monster strikes (Press enter)!!!")
             # Monster Attacks Back
@@ -125,6 +131,41 @@ while m_health_points > 0 and health_points > 0:
             # Add damage_bonus to hero's attack
             total_strength = combat_strength + damage_bonus
             m_health_points = function.hero_attacks(total_strength, m_health_points)
+            move_count += 1
+
+# --- Check for Early Win (Zone Entry) ---
+if m_health_points <= 0 and move_count <= 2:
+    zone_active = True
+    print("\n Ideal Death Gamble Activated: The Hero enters THE ZONE! ")
+
+    zone_total_cost = 0  # Track total health used in Zone
+
+    while health_points > zone_hp_cost:
+        choice = input(f"\nYou're in the Zone! Attack with 2.5x power for -{zone_hp_cost} HP? (yes/no): ").lower()
+        if choice == "yes":
+            # Deduct HP cost
+            health_points -= zone_hp_cost
+            zone_total_cost += zone_hp_cost
+
+            # 2.5x attack
+            total_strength = int((combat_strength + damage_bonus) * 2.5)
+            m_health_points = random.randint(10, 20)  # New monster challenge
+            print(f"\nA NEW MONSTER emerges with {m_health_points} HP!")
+            while m_health_points > 0 and health_points > 0:
+                m_health_points = function.hero_attacks(total_strength, m_health_points)
+                if m_health_points > 0:
+                    health_points = function.monster_attacks(m_combat_strength, health_points)
+
+            if health_points > 0:
+                print(" You won the battle and regained all HP spent in Zone!")
+                health_points += zone_total_cost  # Regain spent HP
+            else:
+                print(" You were defeated in the Zone...")
+                break
+        else:
+            print(" You chose to exit the Zone.")
+            break
+
 
 # Determine winner
 if m_health_points <= 0:
